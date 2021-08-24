@@ -1,10 +1,44 @@
 from machine import Pin, ADC
-import onewire, ds18x20, math
+import onewire, ds18x20, math, network, socket
 from time import sleep
 import math
 
+"""Class for configuring ESP WiFi"""
+class ESP_WiFi:
+    def __init__(self):
+        self.port = 0
+        self.server_address = 0
+        self.socket = 0
+        self.connections = False
+        
+    #Initialize Wifi and scan networks
+    def init_wifi(self, SSID, PW):
+        station = network.WLAN(network.STA_IF)
+        access_point = network.WLAN(network.AP_IF)
+        station.active(True)
+        station.scan()
+        station.connect(SSID, PW)
+        while station.isconnected() == False:
+            pass
+        print('Connection successful')
+        print(str(station.ifconfig()[0]))
+        
+    #Initialize Socket and connect to server
+    def init_socket(self):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ADDR = (self.server_address, self.port)
+        print("[SOCKET CONNECTING]")
+        self.socket.connect(ADDR)
+        print("[SOCKET START] Successful")
+        msg = self.socket.recv(1024)
+        print(msg)
+        return True
+    #Send information to server
+    def send_info(self, info):
+        self.socket.sendall(bytearray(info))
+
+""" Class for dealing with MQ13 Gas Sensors """
 class MQ135(object):
-    """ Class for dealing with MQ13 Gas Sensors """
     # The load resistance on the board
     RLOAD = 10.0
     # Calibration resistance at atmospheric CO2 level
@@ -26,7 +60,7 @@ class MQ135(object):
     ATMOCO2 = 397.13
 
 
-    def _init_(self, pin):
+    def __init__(self, pin):
         self.pin = pin
 
     def get_correction_factor(self, temperature, humidity):
@@ -72,9 +106,18 @@ class MQ135(object):
         corrected for temperature/humidity"""
         return self.get_corrected_resistance(temperature, humidity) * math.pow((self.ATMOCO2/self.PARA), (1./self.PARB))
 
+
+wifi = ESP_WiFi()
+wifi.init_wifi('Cuello Alzate','Zaatar017')
+wifi.server_address = '192.168.0.14'
+wifi.port = 7000
+wifi.init_socket()
+
+
 mq135 = MQ135(Pin(4))
 temperature = 21.0
-humidity = 60.0
+humidity = 50.0
+
 
 ds_pin = Pin(21)
 ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
@@ -94,9 +137,17 @@ while True:
               "\t Resistance: "+ str(resistance) +"\t PPM: "+str(ppm)+
               "\t Corrected PPM: "+str(corrected_ppm)+"ppm")
     try:
-        print("Temperatura: {}".format(ds_sensor.read_temp(roms[0])))   #display
+        temp = ds_sensor.read_temp(roms[0])
+        print("Temperatura: {}".format(temp))   #display
     except:
         roms = ds_sensor.scan()
         print("Error: dispositivo no encontrado")
         pass
-    sleep(0.25)
+    
+    try:
+        info = str(temp) + ' ' + str(corrected_ppm)
+        wifi.send_info(info)
+    except:
+        pass
+    
+    sleep(0.5)
