@@ -37,6 +37,7 @@ class ESP_WiFi:
     def send_info(self, info):
         self.socket.sendall(bytearray(info))
 
+pw = 'Zaatar017'
 """ Class for dealing with MQ13 Gas Sensors """
 class MQ135(object):
     # The load resistance on the board
@@ -108,10 +109,15 @@ class MQ135(object):
 
 
 wifi = ESP_WiFi()
-wifi.init_wifi('Cuello Alzate','Zaatar017')
-wifi.server_address = '192.168.0.14'
+wifi.init_wifi('Cuello Alzate', pw)
+wifi.server_address = '192.168.0.8'
 wifi.port = 7000
-wifi.init_socket()
+while True:
+    try:
+        wifi.init_socket()
+        break
+    except:
+        pass
 
 
 mq135 = MQ135(Pin(4))

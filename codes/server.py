@@ -3,19 +3,17 @@ import threading #Usar varios hilos en un mismo programa, para que el servidor p
 import queue
 import time
 
-queue_menu = queue.Queue()
-HEADER = 64
-
 PORT = 7000
 
 SERVER = socket.gethostbyname(socket.gethostname()) #gethostname devuelve el nombre del pc en que se esta corriendo el script
 #gethostbyname sabiendo cual es el nombre de la maquina esta funcion devuelve la direccion de IP del pc
 
+
 FORMAT = 'utf-8' #Formato para la conversion del mensaje recibido
 DISCONNECT_MESSAGE="!DISCONNECT"
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-
+server.setsockopt(socket.SOL_SOCKET, 25, str('wlp2s0'+'\0').encode(FORMAT))
 #El primer parametro es la familia del protocolo qeu se va a estudiar
 #El segundo parametro indica que los datos seran enviados de manera stream
     #tambien hace referencia a una conexion TCP/IP
@@ -26,7 +24,7 @@ server.bind(ADDR)# Se une el socket a la direccion del pc
 def start(): #Nuevas conexiones
     
     server.listen() #Escuchar para nuevas conexiones
-    print(f"[LISTENING] Server is listening on {SERVER}")
+    print(f"[LISTENING] Server is listening on {ADDR}")
     
     conn, addr=server.accept()
     conn.sendall(b'Hola')
