@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -- coding: utf8 --
+# -*- coding: utf8 -*-
 #
 
 
@@ -17,7 +17,7 @@ def end_read(signal,frame):
     continue_reading = False
     GPIO.cleanup()
 
-# Hook the SIGINT
+# Captura el SIGINT
 signal.signal(signal.SIGINT, end_read)
 
 # Crear objeto de la clase MFRC522
@@ -40,10 +40,10 @@ while continue_reading:
     if status == MIFAREReader.MI_OK:
         print ("Tarjeta detectada")
     
-    # Get the UID of the card
+    # Obtiene la  UID de la tarjeta
     (status,uid) = MIFAREReader.MFRC522_Anticoll()
 
-    # If we have the UID, continue
+    # Si se tiene UID, que continue
     if status == MIFAREReader.MI_OK:
 
         # Imprimir UID
@@ -69,3 +69,4 @@ while continue_reading:
             
         else:
             print ("Error de autenticacion")
+
