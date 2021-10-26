@@ -40,9 +40,9 @@ while True:
              curTemp = mySensor.get_temperature() #Utiliza un metodo del objeto para obtener la temperatura
              curTemp = round(curTemp,1) #Redondea la temperatura
              print(f"temp: {curTemp}")
-             myTimeStamp = datetime.datetime.now().strftime("%Y-%m-%d@%H:%M:%S")#Se obtiene la fehca y hora 
+             myTimeStamp = datetime.datetime.now().strftime("%Y%m%d.%H%M%S")#Se obtiene la fehca y hora 
              print(curSensorID + " Temp = " + str(curTemp) + " at " + datetime.datetime.now().strftime("%Y-%m-%d %H%M%S"))
-             payload = "field1=" + str(curTemp) + "&field2=" + str(curGas) #Se construye el payload con los datos del sensor de temperatura y sensor de gas
+             payload = "field1=" + str(curTemp) + "&field2=" + str(curGas) + "&field3=" + str(myTimeStamp) # "2021-12-12-10:10" #Se construye el payload con los datos del sensor de temperatura y sensor de gas
          print("Escribiendo mensaje=", payload, "al host: ", mqtt_host, "clientID= ", mqtt_client_ID)
         
          publish.single(topic, payload, hostname=mqtt_host, transport =t_transport, port =t_port, client_id=mqtt_client_ID, auth={'username':mqtt_username, 'password':mqtt_password})#Se publica la informacion del payload hacia el servidor Thingspeak
