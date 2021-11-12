@@ -21,18 +21,20 @@ def end_read(signal,frame):
     continue_reading = False
     GPIO.cleanup()
     
-
 # Captura el SIGINT
 signal.signal(signal.SIGINT, end_read)
 
 reader = SimpleMFRC522() #Se crea un objeto MFRC522 llamado reader
 
-dbc = dropbox.Dropbox('_rqxShCd_6YAAAAAAAAAAaeOv4CbWaoQBGlynuE_YnZ55GZVqu-vHehGNKxiCzF9')#Token de autorizacion 
+dbc = dropbox.Dropbox('KxL2v9KtxYwAAAAAAAAAAblg3U4IVJ9YS8iNJI2yowo9o6jv9l-6hVggIyRS49eq')#Token de autorizacion 
 
 print('Informacion de cuenta:', dbc.users_get_current_account())
 
 # Nombre de la imagen 
-i = 1
+i1 = 1
+i2 = 1
+
+#ids={1:151019198817, 2:533916563683}
 
 # Este loop busca la tarjeta 
 while continue_reading:
@@ -40,30 +42,33 @@ while continue_reading:
     id, text= reader.read() #Funcion que lee el ID de la tarjeta y el texto en caso de que se transmita alguno
     print(id)
     #print(text)
-
-    if 151019198817 == id: #Si es el de la tarjeta
+    #print(type(id))
+    if id==151019198817: #Si es el de la tarjeta
         print("Tarjeta identificada")
-        fname = 'imagen' + '_' +str(i)+'.jpg'  #Se contruye el nombre de la foto a tomar
+        fname = 'imagen' + '_' +str(151)+'_'+str(i1)+'.jpg'  #Se contruye el nombre de la foto a tomar
         fpath = '/home/pi/HavenSecurity_IoT/codes/'+fname #El path donde se guarda la foto
         comando="raspistill -o "+str(fname) #Se construye el nombre de la foto
         os.system(comando) # Cuando la tarjeta sea identificada que tome la foto
-        i+=1
-        f=open(fname,'rb') #Abre el archivo para ser enviado
-        res=dbc.files_upload(f.read(),fpath, mute =True) #Se envia el archivo 
+        
+        i1+=1
+        f= open(fname,'rb')#Abre el archivo para ser enviado
+    
+        res = dbc.files_upload(f.read(),fpath, mute =True) #Se envia el archivo 
         print("Resultado: ",res) #Se muestra el resultado del envio
         #print(dbc.files_get_metadata(fpath).server_modified)
         dbc.close()
-
-    if 533916563683 == id: #Si el id es el del tag
-        print("Tag identificado")
-        fname = 'imagen' + '_' +str(i)+'.jpg'
-        fpath = '/home/pi/HavenSecurity_IoT/codes/'+fname
-        comando="raspistill -o "+str(fname)
+        
+    if id == 533916563683:
+        print("Tag identificada")
+        fname = 'imagen' + '_' +str(533)+'_'+str(i2)+'.jpg'  #Se contruye el nombre de la foto a tomar
+        fpath = '/home/pi/HavenSecurity_IoT/codes/'+fname #El path donde se guarda la foto
+        comando="raspistill -o "+str(fname) #Se construye el nombre de la foto
         os.system(comando) # Cuando la tarjeta sea identificada que tome la foto
-        i+=1
-        f=open(fname,'rb')
-        res=dbc.files_upload(f.read(),fpath, mute =True)
-        print("Resultado: ",res)
+        
+        i2+=1
+        f= open(fname,'rb')#Abre el archivo para ser enviado
+    
+        res = dbc.files_upload(f.read(),fpath, mute =True) #Se envia el archivo 
+        print("Resultado: ",res) #Se muestra el resultado del envio
         #print(dbc.files_get_metadata(fpath).server_modified)
         dbc.close()
-

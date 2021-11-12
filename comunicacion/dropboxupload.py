@@ -10,7 +10,7 @@ sleep(1)
 os.system(comando)
 sleep(1)
 
-dbc = dropbox.Dropbox('sl.A46GLr0vuBjmMPleQnxys4YO4EHYvnx1aFgVXAJhLLZpA3-3HGbjztTXAZR5IxT80pPKkfcTNhyL8lfM3WrFWn3bifC3nHyaeX3Nxn6byuNMcl283Tiw_D5OHClztootLSf9gi7A')
+dbc = dropbox.Dropbox('KxL2v9KtxYwAAAAAAAAAAblg3U4IVJ9YS8iNJI2yowo9o6jv9l-6hVggIyRS49eq')
 print('Informacion de cuenta:', dbc.users_get_current_account())
 
 fname="image.jpg"
