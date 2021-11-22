@@ -19,7 +19,7 @@ def rfid_dropbox_config():
 
     reader = SimpleMFRC522() #Se crea un objeto MFRC522 llamado reader
 
-    dbc = dropbox.Dropbox('KxL2v9KtxYwAAAAAAAAAAblg3U4IVJ9YS8iNJI2yowo9o6jv9l-6hVggIyRS49eq')#Token de autorizacion 
+    dbc = dropbox.Dropbox(os.environ['DROPBOX_KEY'])#Token de autorizacion 
 
     return dbc, reader
 

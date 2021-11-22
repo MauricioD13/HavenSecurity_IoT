@@ -17,8 +17,8 @@ def temp_mqtt_func():
     mqtt_host = "mqtt3.thingspeak.com" #Nombre del host de teamspeak
 
     mqtt_client_ID = "JhgWCisEHiwuOCgqLBsDCiA" #Id del cliente unico para el topic
-    mqtt_username = "JhgWCisEHiwuOCgqLBsDCiA" #Username unico de Thingspeak
-    mqtt_password = "6P6FHOXeuh2SUFmrirNj7sLU" #Contraseña unica Thingspeak
+    mqtt_username = os.environ['USER_THINGSPEAK'] #Username unico de Thingspeak
+    mqtt_password = os.environ['PASS_THINGSPEAK'] #Contraseña unica Thingspeak
 
     t_transport = "websockets" #Metodo comunicacion
     t_port = 80 #Puerto para la comunicacion
