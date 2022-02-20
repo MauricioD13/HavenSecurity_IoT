@@ -16,3 +16,10 @@ sensor de gases, sensor RFID y una cámara de vídeo y para el proceso y
 envío de datos (nodo) el uso de la RaspberryPi 3 B+, como último punto
 de la red se cuenta con una interfaz de usuario donde se muestra el
 monitoreo de la red.
+
+
+## Funcionamiento
+
+Dentro de la carpeta codes se debe ejecutar el siguiente comando: 
+
+		python3 havensec.py

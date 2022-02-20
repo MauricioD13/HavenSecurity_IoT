@@ -1,3 +1,4 @@
 dropbox
 paho_mqtt
-
+mfrc522
+requests
